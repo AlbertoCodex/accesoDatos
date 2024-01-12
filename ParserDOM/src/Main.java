@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
+    private static final String file = "prueba.xml";
     public static void main(String[] args) {
         parser();
     }
@@ -23,7 +24,7 @@ public class Main {
 
         try {
             System.out.println("Parser DOM");
-            File inputFile = new File("prueba.xml");
+            File inputFile = new File(file);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputFile);
@@ -40,7 +41,7 @@ public class Main {
                 muestraNodoDocumento(nodo);
                 break;
             case Node.ELEMENT_NODE:
-                System.out.println("Nodo Documento");
+                System.out.println("Nodo Elemento");
                 muestraNodoElemento(nodo);
                 break;
             case Node.TEXT_NODE:
@@ -60,7 +61,8 @@ public class Main {
         }
     }
     public static void muestraNodoDocumento(Node nodo) {
-
+        System.out.println(nodo.getNodeName());
+        System.out.println(file);
     }
 
     public static void muestraNodoElemento(Node nodo) {
@@ -74,6 +76,6 @@ public class Main {
     }
 
     public static void muestraNodoTexto(Node nodo) {
-
+        System.out.println(nodo.getNodeValue());
     }
 }
