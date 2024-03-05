@@ -1,0 +1,38 @@
+xquery version "3.1";
+
+(: Ejercicio 1 - Inserta el siguiente libro después de Harry Potter  :)
+update insert
+<book category="Novela"> 
+    <title lang="ES">El lazarillo de Tormes</title>
+    <author>Anónimo</author>
+    <year>1998</year>
+    <price>30.00</price>
+</book>
+following doc('/db/practicasXML/libros.xml')/bookstore/book/[@category="CHILDREN"]
+
+(: Ejercicio 2 - Modifica todos los Títulos al lenguaje ES, para lo cual tendrás que modificar el atributo de Title y traducir los títulos. :)
+let $doc := doc('/db/practicasXML/libros.xml')/bookstore/book/title
+return update value $doc/@lang with 'ES'
+
+(: Ejercicio 3 - Cambia el nombre de todos los elementos a español (por ejemplo author pasaría a denominarse autor…) :)
+(: Modificar libro :)
+update rename doc('/db/practicasXML/libros.xml')/bookstore/book
+as "libro"
+(: Modificar elementos dentro de libro :)
+update rename doc('/db/practicasXML/libros.xml')/bookstore/book/author
+as "autor"
+update rename doc('/db/practicasXML/libros.xml')/bookstore/book/title
+as "titulo"
+update rename doc('/db/practicasXML/libros.xml')/bookstore/book/year
+as "anyo"
+update rename doc('/db/practicasXML/libros.xml')/bookstore/book/price
+as "precio"
+
+(: Ejercicio 4 - Cambia el año de Everyday Italian por 2015 :)
+update value doc('/db/practicasXML/libros.xml')/bookstore/libro[titulo="Everyday Italian"]/anyo
+with "2015"
+
+(: Ejercicio 5 - Borra el libro Learning XML :)
+for $libro in doc('/db/practicasXML/libros.xml')/bookstore/libro
+where $libro/titulo="Learning XML"
+return update delete $libro
