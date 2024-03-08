@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clientes>
+    <cliente DNI="78901234X" Edad="24">
+        <apellidos>NADALES</apellidos>
+        <CP>44126</CP>
+    </cliente>
+    <cliente DNI="89012345E">
+        <apellidos>ROJAS</apellidos>
+        <CP>44126</CP>
+    </cliente>
+    <cliente DNI="56789012B">
+        <apellidos>SAMPER</apellidos>
+        <CP>29730</CP>
+    </cliente>
+    <cliente DNI="12345678A" Edad="23">
+        <apellidos>Naranjo</apellidos>
+        <CP>29110</CP>
+        <descendiente Edad="9" Nombre="Alberto"/>
+        <descendiente Edad="10" Nombre="Alejandro"/>
+    </cliente>
+    <cliente DNI="87654321Z" Edad="23">
+        <apellidos>Nunez</apellidos>
+        <CP>29110</CP>
+        <descendiente Edad="6" Nombre="Ana"/>
+    </cliente>
+</clientes>
