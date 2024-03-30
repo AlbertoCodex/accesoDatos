@@ -26,6 +26,7 @@ public class Main {
             System.out.println("2- Retirada de dinero");
             System.out.println("3- Transferencia entre cuentas");
             System.out.println("4- Balance de cuenta");
+            System.out.println("5- Mostrar todas las cuentas");
             System.out.println("0- Salir");
             x = sc.nextInt();
             switch (x){
@@ -43,9 +44,11 @@ public class Main {
                     break;
                 // Balance de cuenta
                 case 4:
+                    balance(conex);
                     break;
                 // Listar tabla cuentas
                 case 5:
+                    listarCuentas(conex);
                     break;
             }
         }
@@ -64,7 +67,6 @@ public class Main {
            System.out.println("El número de cuenta no existe");
        }
     }
-
     public static void retirada(String[] conex) throws SQLException {
         Scanner sc = new Scanner(System.in);
         System.out.println("¿Cual es el número de cuenta?");
@@ -83,7 +85,6 @@ public class Main {
             System.out.println("El número de cuenta no existe");
         }
     }
-
     public static void transferencia(String[] conex) throws SQLException {
         Scanner sc = new Scanner(System.in);
         System.out.println("¿Cual es la cuenta de origen?");
@@ -119,14 +120,16 @@ public class Main {
         }
         return true;
     }
-
-    public static void ingresoQuery(String[] conex, float ingreso, String cuentaOrigen) throws SQLException {
+    public static void ingresoQuery(String[] conex, float cantidad, String cuentaDestino) throws SQLException {
         Connection c = DriverManager.getConnection(conex[0], conex[1], conex[2]);
         try (Statement s = c.createStatement()) {
             c.setAutoCommit(false);
             s.execute("UPDATE cuentas " +
-                    "SET Saldo=(SELECT SUM(Saldo + " + ingreso + ") WHERE NumCuenta='" + cuentaOrigen + "')" +
-                    " WHERE NumCuenta='" + cuentaOrigen + "'");
+                    "SET Saldo=(SELECT SUM(Saldo + " + cantidad + ") WHERE NumCuenta='" + cuentaDestino + "')" +
+                    " WHERE NumCuenta='" + cuentaDestino + "'");
+            // Add ingreso -> tabla Movimientos
+            s.execute("INSERT INTO movimientos (concepto, cuentadestino, cantidad)" +
+                    " VALUES ('ingreso'"  + ", '" + cuentaDestino + "', " + cantidad + ")");
             c.commit();
         } catch (SQLException e) {
             try {
@@ -139,14 +142,15 @@ public class Main {
             }
         }
     }
-
-    public static void retiradaQuery(String[] conex, float cantidad, String cuentaOrigen) throws SQLException {
+    public static void retiradaQuery(String[] conex, float cantidad, String cuentaDestino) throws SQLException {
         Connection c = DriverManager.getConnection(conex[0], conex[1], conex[2]);
         try (Statement s = c.createStatement()) {
             c.setAutoCommit(false);
             s.execute("UPDATE cuentas SET Saldo=(SELECT SUM(Saldo + -" + cantidad + ") " +
-                    "WHERE NumCuenta='" + cuentaOrigen + "') " +
-                    "WHERE NumCuenta='" + cuentaOrigen + "'");
+                    "WHERE NumCuenta='" + cuentaDestino + "') " +
+                    "WHERE NumCuenta='" + cuentaDestino + "'");
+            s.execute("INSERT INTO movimientos (concepto, cuentadestino, cantidad)" +
+                    " VALUES ('retirada'"  + ", '" + cuentaDestino + "', " + cantidad + ")");
             c.commit();
         } catch (SQLException e) {
             try {
@@ -157,6 +161,51 @@ public class Main {
                 System.err.println("Se ha producido un error al hacer el rollback");
                 System.out.println("Excepcion: " + ex.getMessage());
             }
+        }
+    }
+    public static void listarCuentas(String[] conex) throws SQLException {
+        Connection c = DriverManager.getConnection(conex[0], conex[1], conex[2]);
+        Statement s = c.createStatement();
+        ResultSet rs = s.executeQuery("SELECT * FROM bdbanco.cuentas");
+        System.out.println("Num Titular Saldo");
+        while (rs.next()) {
+            String numCuenta = rs.getString("NumCuenta");
+            String titular = rs.getString("Titular");
+            String saldo = rs.getString("Saldo");
+            System.out.println(numCuenta + " " + titular + " " + saldo);
+        }
+    }
+    public static void balance(String[] conex) throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("¿Cual es el número de cuenta?");
+        String cuentaOrigen = sc.nextLine();
+
+        // Comprobamos si existe el numero de cuenta
+        if(checkCuenta(conex, cuentaOrigen)) {
+            balanceQuery(conex, cuentaOrigen);
+        } else {
+            System.out.println("El número de cuenta no existe");
+        }
+    }
+    public static void balanceQuery(String[] conex, String numCuenta) throws SQLException {
+        Connection c = DriverManager.getConnection(conex[0], conex[1], conex[2]);
+        Statement s = c.createStatement();
+        // Suma ingresos
+        ResultSet rsIngreso = s.executeQuery("SELECT SUM(cantidad) AS total FROM movimientos WHERE concepto = 'ingreso' AND cuentadestino= '" + numCuenta + "'");
+        rsIngreso.next();
+        double totalIngresos = rsIngreso.getDouble("total");
+        // Suma retiradas
+        ResultSet rsRetiradas = s.executeQuery("SELECT SUM(cantidad) AS total FROM movimientos WHERE concepto = 'retirada' AND cuentadestino= '" + numCuenta + "'");
+        rsRetiradas.next();
+        double totalRetiradas = rsRetiradas.getDouble("total");
+        // Saldo cuenta
+        ResultSet rsCuenta = s.executeQuery("SELECT Saldo FROM cuentas WHERE NumCuenta= '" + numCuenta + "'");
+        rsCuenta.next();
+        double saldo = rsCuenta.getDouble("Saldo");
+        if (totalIngresos - totalRetiradas == saldo) {
+            System.out.println("El balance coincide.");
+        } else {
+            System.out.println("El balance no coincide.");
         }
     }
 }
