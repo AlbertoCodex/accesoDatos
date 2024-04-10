@@ -193,10 +193,12 @@ public class Main {
         // Suma ingresos
         ResultSet rsIngreso = s.executeQuery("SELECT SUM(cantidad) AS total FROM movimientos WHERE concepto = 'ingreso' AND cuentadestino= '" + numCuenta + "'");
         rsIngreso.next();
+        System.out.println("La suma de todos sus ingresos es: " + rsIngreso.getString(1));
         double totalIngresos = rsIngreso.getDouble("total");
         // Suma retiradas
         ResultSet rsRetiradas = s.executeQuery("SELECT SUM(cantidad) AS total FROM movimientos WHERE concepto = 'retirada' AND cuentadestino= '" + numCuenta + "'");
         rsRetiradas.next();
+        System.out.println("La suma de todas sus retiradas es: " + rsRetiradas.getString(1));
         double totalRetiradas = rsRetiradas.getDouble("total");
         // Saldo cuenta
         ResultSet rsCuenta = s.executeQuery("SELECT Saldo FROM cuentas WHERE NumCuenta= '" + numCuenta + "'");
