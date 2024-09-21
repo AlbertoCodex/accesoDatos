@@ -1,0 +1,3 @@
+Esto es
+lo que se tiene
+que pegar en el otro fichero
