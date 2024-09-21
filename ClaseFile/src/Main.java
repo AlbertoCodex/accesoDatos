@@ -80,7 +80,6 @@ public class Main {
                     break;
                 case 2: // Enumera el contenido del archivo
                     int j = 1;
-                    br = new BufferedReader(new FileReader(archivo));
                     while ((line = br.readLine()) != null) {
                         System.out.println(j + "- " +line);
                         j++;
@@ -91,6 +90,9 @@ public class Main {
                     break;
                 case 4: // Añade el texto del fichero dado al original
                     anexarFichero(archivo);
+                    break;
+                default:
+                    System.out.println("Introduce un número correcto");
                     break;
             }
             br.close();
