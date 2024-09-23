@@ -10,7 +10,6 @@ public class Main {
             comprobarFichero(ruta);
         }
     }
-
     // exist && isFile
     public static void comprobarFichero(File ruta) throws IOException {
         if (ruta.exists()) {
@@ -23,10 +22,8 @@ public class Main {
             }
         } else {System.out.println("La ruta no existe o no se encuentra");}
     }
-
     // Listar contenido de directorios
     public static void menuDirectorio(File dir) {
-
         int x = -1;
         // Guardar los directorios y archivos
         File[] listaFicheros = dir.listFiles();
@@ -37,6 +34,9 @@ public class Main {
                     + "2 para listar el contenido recursivamente");
             x = sc.nextInt();
             switch (x) {
+                case 0:
+                    System.out.println("Hasta luego");
+                    break;
                 case 1: // Listar directorio
                     for (int i = 0; i < listaFicheros.length; i++) {
                         System.out.println(listaFicheros[i].getName());
@@ -45,10 +45,12 @@ public class Main {
                 case 2: // Listar directorio y subdirectorios
                     buscarDirectorio(listaFicheros);
                     break;
+                default:
+                    System.out.println("Introduce un número correcto");
+                    break;
             }
         }
     }
-
     // Listar directorios y sus subdirectorios
     public static void buscarDirectorio(File[] listaFicheros) {
          File[] subDirectorio;
@@ -59,7 +61,6 @@ public class Main {
              buscarDirectorio(subDirectorio);
          }
     }
-
     // show, enum, find, append - text
     public static void menuArchivo(File archivo) throws IOException {
         BufferedReader br;
@@ -75,6 +76,9 @@ public class Main {
                     + "4 para indexar un archivo");
             x = sc.nextInt();
             switch (x) {
+                case 0:
+                    System.out.println("Hasta luego");
+                    break;
                 case 1: // Muestra el contenido del archivo
                     while ((line = br.readLine()) != null) {System.out.println(line);}
                     break;
@@ -98,7 +102,6 @@ public class Main {
             br.close();
         }
     }
-
     // Busca una cadena y sus repeticiones en cada linea
     public static void buscarString(BufferedReader br) throws IOException {
          int contLine = 0;
@@ -118,7 +121,6 @@ public class Main {
              }
          }
     }
-
     // Copia el contenido de un archivo y lo copia al final del original
     public static void anexarFichero(File archivo) throws IOException {
         String line;
