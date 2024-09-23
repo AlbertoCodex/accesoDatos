@@ -55,10 +55,11 @@ public class Main {
     public static void buscarDirectorio(File[] listaFicheros) {
          File[] subDirectorio;
          for (int i = 0; i < listaFicheros.length; i++) {
-             if (listaFicheros[i].isFile()) {System.out.println(listaFicheros[i]);}
              System.out.println(listaFicheros[i]);
-             subDirectorio = listaFicheros[i].listFiles();
-             buscarDirectorio(subDirectorio);
+             if (listaFicheros[i].isDirectory()) {
+                 subDirectorio = listaFicheros[i].listFiles();
+                 buscarDirectorio(subDirectorio);
+             }
          }
     }
     // show, enum, find, append - text
