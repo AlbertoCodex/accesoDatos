@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Main {
-    private static Scanner sc = new Scanner(System.in);;
+    private static Scanner sc = new Scanner(System.in);
 
      public static void main(String[] args) throws IOException {
         for (String fichero : args) {
@@ -54,13 +54,18 @@ public class Main {
     // Listar directorios y sus subdirectorios
     public static void buscarDirectorio(File[] listaFicheros) {
          File[] subDirectorio;
+         // Lista ficheros
          for (int i = 0; i < listaFicheros.length; i++) {
-             System.out.println(listaFicheros[i]);
-             if (listaFicheros[i].isDirectory()) {
-                 subDirectorio = listaFicheros[i].listFiles();
-                 buscarDirectorio(subDirectorio);
-             }
+             if (listaFicheros[i].isFile()) {System.out.println("archivo " + listaFicheros[i]);}
          }
+         // Lista directorios
+        for (int j = 0; j < listaFicheros.length; j++) {
+            if (listaFicheros[j].isDirectory()) {
+                System.out.println("\n" + "directorio " +listaFicheros[j]);
+                subDirectorio = listaFicheros[j].listFiles();
+                buscarDirectorio(subDirectorio);
+            }
+        }
     }
     // show, enum, find, append - text
     public static void menuArchivo(File archivo) throws IOException {
@@ -133,7 +138,7 @@ public class Main {
         String file = sc.nextLine();
         File appendFile = new File(file);
 
-        if (appendFile.isFile()) {
+        if (appendFile.exists() && appendFile.isFile()) {
             BufferedReader br = new BufferedReader(new FileReader(appendFile)); // Leer el archivo nuevo
             while ((line = br.readLine()) != null) {
                 fileText.append(line).append("\n");
