@@ -44,7 +44,11 @@ public class FicheroAccesoAleatorio {
             System.out.println(line);
         }
     }
-
+    // Devuelve posicion actual
+    public long posicionActual() throws IOException {
+        return raf.getFilePointer();
+    }
+    // Getters y Setters
     public RandomAccessFile getRaf() {
         return raf;
     }

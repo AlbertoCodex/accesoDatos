@@ -12,6 +12,7 @@ public class Main {
 
     public static void menu(FicheroAccesoAleatorio faa) throws IOException {
         int x = -1;
+        long pos;
 
         while (x != 0) {
             System.out.println("El puntero está en la posición: " + faa.getRaf().getFilePointer());
@@ -22,9 +23,11 @@ public class Main {
                     System.out.println("Hasta luego");
                     break;
                 case 1:
+                    pos = faa.posicionActual();
                     if (sc.hasNextLine()) {sc.nextLine();} // Comprobar que esta limpio el scanner
                     System.out.println("Escribe el texto:");
                     faa.escribir(sc.nextLine());
+                    faa.ir(pos);
                     break;
                 case 2: // Coloca el cursor en la posición indicada.
                     if (sc.hasNextLine()) {sc.nextLine();} // Comprobar que esta limpio el scanner
@@ -42,13 +45,20 @@ public class Main {
                     faa.atras(sc.nextInt());
                     break;
                 case 5: // Muestra por pantalla el caracter apuntado por el cursor.
+                    pos = faa.posicionActual();
                     faa.leer();
+                    faa.ir(pos);
                     break;
                 case 6: // Muestra el resto de la línea de la linea donde se encuentra el cursor.
+                    pos = faa.posicionActual();
                     faa.leerLinea();
+                    faa.ir(pos);
                     break;
                 case 7: // Muestra el contenido de un fichero
+                    pos = faa.posicionActual();
+                    faa.ir(0);
                     faa.mostrarFichero();
+                    faa.ir(pos);
                     break;
             }
         }
