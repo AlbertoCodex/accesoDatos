@@ -1,9 +1,31 @@
 import java.util.HashMap;
 
 public class Main {
-    private static HashMap<String, Integer> personas;
+    static String NOMBRE = "Alberto";
+    static int NUMERO = 1;
+
     public static void main(String[] args) {
-         personas = new HashMap<>();
-         Agenda agenda = new Agenda();
+        Agenda agenda = new Agenda();
+        menu(agenda);
+    }
+
+    public static void menu(Agenda agenda) {
+        // Add nueva entrada
+        agenda.insertar(NOMBRE, NUMERO);
+        // Mostrar valor del nombre dado
+        agenda.buscar(NOMBRE);
+        // Mostrar size de la agenda
+        agenda.longitud();
+        // Mostrar key/value de agenda
+        agenda.ver();
+        // Borrar dado un nombre
+        agenda.borrar(NOMBRE);
+        // Revisar si se ha eliminado
+        agenda.ver();
+        // Modificar telefono
+        agenda.insertar(NOMBRE, NUMERO);
+        agenda.modificar(NOMBRE, NUMERO + 1);
+        // Modificar null Key
+        agenda.modificar("NULL", 0);
     }
 }
