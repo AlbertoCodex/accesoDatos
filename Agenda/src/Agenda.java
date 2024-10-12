@@ -1,7 +1,9 @@
+import java.io.*;
 import java.util.HashMap;
 
 public class Agenda {
     private HashMap<String, Integer> personas;
+    private RandomAccessFile raf;
     // Constructor iniciar Map
     public Agenda() {
         personas = new HashMap<>();
@@ -30,8 +32,12 @@ public class Agenda {
     }
     // Borra el contacto con ese nombre
     public void borrar(String nombre) {
-        personas.remove(nombre);
-        System.out.println("Se ha borrado a: " + nombre);
+        if (personas.containsKey(nombre)) {
+            personas.remove(nombre);
+            System.out.println("Se ha borrado a: " + nombre);
+        } else {
+            System.out.println("No se encuentra ese nombre");
+        }
     }
     // Modifica el número de telefono (por el pasado como argumento) del nombre solicitado.
     public void modificar(String nombre, int numero) {
@@ -43,7 +49,28 @@ public class Agenda {
         }
     }
     // Metodo para convertir la información en un String[] (opcional).
-    public void exportar() {
+    public void exportar(String ruta) throws IOException {
+        raf = new RandomAccessFile(ruta,"rw");
+        raf.setLength(0); // Limpiar el contenido del archivo
+        for (String i : personas.keySet()) {
+            raf.writeBytes((i + "," + personas.get(i) + "\n"));
+        }
+        raf.close();
+    }
+    // Cargar el contenido de la agenda (fichero CSV)
+    public void importar(String ruta) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(ruta));
+        String line;
 
+        while((line=br.readLine()) != null) {
+            String str[] = line.split(","); // Separados por coma
+            if (str.length == 2) { // Minimo Key/Value
+                String nombre = str[0].trim(); // Key
+                int numero = Integer.parseInt(str[1].trim()); // Value
+                personas.put(nombre,numero);
+            } else {
+                System.out.println("Esta linea no es valida " + line);
+            }
+        }
     }
 }
