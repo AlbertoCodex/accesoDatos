@@ -7,8 +7,8 @@ public class Main {
     private static Agenda agenda = new Agenda();
 
     public static void main(String[] args) throws IOException {
-        String ruta = args[0];
-        agenda.importar(ruta);
+        String ruta = "test.csv";
+        agenda.importar("test.csv");
 
         menu(agenda, ruta);
     }
