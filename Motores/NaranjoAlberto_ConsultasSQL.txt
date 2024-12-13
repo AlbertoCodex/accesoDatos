@@ -1,0 +1,15 @@
+1. Marca y modelo de los coches que tienen versión gasolina.
+SELECT marca, modelo FROM "Concesionario".coche WHERE EXISTS (SELECT 1 FROM unnest(motores) AS motor WHERE motor.tipo = 'gasolina');
+
+2. Marca y modelo de los coches que son exclusivamente eléctricos.
+SELECT marca, modelo FROM "Concesionario".coche WHERE NOT EXISTS (SELECT 1 FROM unnest(motores) AS motor WHERE motor.tipo != 'eléctrico');
+
+3. Marca y modelo de los coches que no tienen versión diesel.
+SELECT marca, modelo FROM "Concesionario".coche WHERE NOT EXISTS (SELECT 1 FROM unnest(motores) AS motor WHERE motor.tipo = 'diesel');
+
+4. Marca y modelo de los coches en la que todos los motores tienen por lo menos 120cv.
+SELECT marca, modelo FROM "Concesionario".coche WHERE NOT EXISTS (SELECT 1 FROM unnest(motores) AS motor WHERE motor.cv < 120);
+
+5. Marca y modelo de los coches que tienen al menos un motor de menos de 1000cc.
+SELECT marca, modelo FROM "Concesionario".coche WHERE EXISTS (SELECT 1 FROM unnest(motores) AS motor WHERE motor.cc < 1000);
+
