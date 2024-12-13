@@ -1,0 +1,15 @@
+1. Marca, modelo y número de colores en el que se vende el coche.
+SELECT marca, modelo, array_length(colores, 1) FROM "Concesionario".coche;
+
+2. Marca y modelo de los coches que se vendan en color negro.
+SELECT marca, modelo FROM "Concesionario".coche WHERE 'Negro' = ANY(colores);
+
+3. Marca y modelo de los coches que se vendan en blanco y rojo.
+SELECT marca, modelo FROM "Concesionario".coche WHERE 'Blanco' = ANY(colores) AND 'Rojo' = ANY(colores);
+
+4. Marca y modelo de los coches que no se vendan en blanco.
+SELECT marca, modelo FROM "Concesionario".coche WHERE NOT ('Blanco' = ANY(colores));
+
+5. Marca y modelo de los coches que sólo se vendan en rojo.
+SELECT marca, modelo FROM "Concesionario".coche WHERE colores = ARRAY['Rojo'];
+
